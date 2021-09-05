@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 class StoreController extends Controller
 {
@@ -23,7 +24,7 @@ class StoreController extends Controller
      */
     public function create()
     {
-        //
+        return view('store.create');
     }
 
     /**
@@ -45,7 +46,7 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('store.show', compact($id));
     }
 
     /**
@@ -56,7 +57,7 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view( 'store.edit', compact($id));
     }
 
     /**
