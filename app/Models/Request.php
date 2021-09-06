@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDelete; 
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Request extends Model
 {
     use HasFactory;
-    use SoftDelete;
+    use SoftDeletes;
 
     protected $guarded = ['deleted_at'];
 

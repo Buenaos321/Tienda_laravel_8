@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
@@ -14,7 +15,8 @@ class StoreController extends Controller
      */
     public function index()
     {
-        return view('store.index');
+        $products = Product::latest()->paginate(5);
+        return view('store.index' , compact('products', $products));
     }
 
     /**
