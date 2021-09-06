@@ -21,7 +21,7 @@ class CreateProductsTabel extends Migration
             $table->integer('stok');
             $table->string('status');
             $table->boolean('warranty');
-            $table->integer('cart_id')->unsigned();
+            $table->integer('cart_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
