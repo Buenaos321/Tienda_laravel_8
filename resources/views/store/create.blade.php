@@ -15,13 +15,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="name">Nombre Del producto</label>
-                        <input type="text" class="form-control" id="name" name="name">
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="price">Precio</label>
-                        <input type="number" class="form-control" id="price" name="price">
+                        <input type="number" class="form-control" id="price" name="price" required>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -32,8 +32,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="stock">Quedan en stock</label>
-                        <input type="number" class="form-control" id="stock" name="stock">
+                        <label for="stok">Quedan en stock</label>
+                        <input type="number" class="form-control" id="stok" name="stok">
 
                     </div>
                 </div>
@@ -59,14 +59,14 @@
 
                 <div class="col-md-6">
                     <div class="fom-grup">
-                        <label for="images">Imagenes</label>
-                        <input type="file" class="form-control" id="images" name="images" multiple>
+                        <label for="image">Imagenes</label>
+                        <input type="file" class="form-control" id="image" name="image[]" multiple required>
                     </div>
                 </div>
 
                 <div class="col-md-12 align-items-end">
                     <button type="submit" class="btn btn-success">crear</button>
-                    <a href="/store" class="btn btn-secondary">Volver</a>    
+                    <a href="/store" class="btn btn-secondary">Volver</a>
                 </div>
 
             </div>

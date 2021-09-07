@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Images;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Intervention\Image\Facades\Image;
+
 
 class StoreController extends Controller
 {
@@ -37,7 +40,47 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = new product;
+        $request->validate([
+            'name' => 'required|max:255',
+            'price' =>  'required|numeric',
+            'image' => 'required',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->stok = $request->stok;
+        $product->description = $request->description;
+        $product->status = $request->status;
+        if ($request->warranty == 'yes') {
+            $product->warranty = true;
+        } else {
+            $product->warranty = false;
+        }
+
+
+        $product->save();
+
+
+        // por cada imgen que va a llegar en el request
+        foreach($request->image as $image){
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $url=public_path('images').'/'.$name;
+            Image::make($image)->save($url);
+
+
+
+            $newImage = new \App\Models\Images;
+
+            $newImage->name = $name;
+            $newImage->url = $url;
+            $newImage->product_id = $product->id;
+
+            $newImage->save();
+        }
+
+        return redirect()->route('store.index');
     }
 
     /**
