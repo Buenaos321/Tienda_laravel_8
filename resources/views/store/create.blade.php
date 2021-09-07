@@ -8,7 +8,9 @@
 </div>
 <div class="row pt-4">
     <div class="col-md-12">
-        <form>
+        <form action="/store" method="post" enctype="multipart/form-data" >
+            {{--Esta linea protege la app de ataques csrf--}}
+            @csrf
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -28,14 +30,14 @@
                         <textarea class="form-control" name="description" id="description"></textarea>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="stock">Quedan en stock</label>
                         <input type="number" class="form-control" id="stock" name="stock">
 
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="status">Estado</label>
                         <select name="status" id="status" class="form-control">
@@ -45,7 +47,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="warranty">Garantia</label>
                         <select name="warranty" id="warranty" class="form-control">
@@ -54,6 +56,19 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="col-md-6">
+                    <div class="fom-grup">
+                        <label for="images">Imagenes</label>
+                        <input type="file" class="form-control" id="images" name="images" multiple>
+                    </div>
+                </div>
+
+                <div class="col-md-12 align-items-end">
+                    <button type="submit" class="btn btn-success">crear</button>
+                    <a href="/store" class="btn btn-secondary">Volver</a>    
+                </div>
+
             </div>
         </form>
     </div>
