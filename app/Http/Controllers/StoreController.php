@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Images;
 use App\Models\Product;
+use App\Models\Images;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 
@@ -65,9 +66,11 @@ class StoreController extends Controller
 
         // por cada imgen que va a llegar en el request
         foreach($request->image as $image){
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $url=public_path('images').'/'.$name;
-            Image::make($image)->save($url);
+            $name = $image->getClientOriginalName().'.'.$image->getClientOriginalExtension() ;
+            $url = $image->getClientOriginalName().time().'.'.$image->getClientOriginalExtension();
+
+            //los archivos se guardan en storage/app/public/images
+            Image::make($image)->save(public_path('storage/images/'.$url));
 
 
 
@@ -91,7 +94,10 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        return view('store.show', compact($id));
+        $product = Product::findOrFail($id);
+        $images = Images::all()->where('product_id', '=', $product->id);
+        return view('store.show', compact('product','images'));
+
     }
 
     /**
@@ -102,7 +108,8 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        return view( 'store.edit', compact($id));
+        $product = Product::findOrFail($id);
+        return view( 'store.edit', compact('product',$product));
     }
 
     /**
@@ -114,7 +121,53 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->stok = $request->stok;
+        $product->description = $request->description;
+        $product->status = $request->status;
+
+        if ($request->warranty == "yes") {
+            $product->warranty = true;
+        } else {
+            $product->warranty = false;
+        }
+
+        $product->update();
+
+        if(count($request->files) > 0) {
+            $images = Images::all()->where('product_id', '=', $product->id);
+
+            foreach ($images as $image) {
+                $exists = Storage::disk('local')->exists(storage_path('images/'.$image->url));
+                if ($exists) {
+                    Storage::delete(public_path('storage/images/'.$image->url));
+                    Images::destroy($image->id);
+                }
+            }
+
+            // por cada imgen que va a llegar en el request
+            foreach($request->image as $image){
+                $name = $image->getClientOriginalName().'.'.$image->getClientOriginalExtension() ;
+                $url = $image->getClientOriginalName().time().'.'.$image->getClientOriginalExtension();
+
+                //los archivos se guardan en storage/app/public/images
+                Image::make($image)->save(public_path('storage/images/'.$url));
+
+
+
+                $newImage = new \App\Models\Images;
+
+                $newImage->name = $name;
+                $newImage->url = $url;
+                $newImage->product_id = $product->id;
+
+                $newImage->save();
+            }
+            return redirect()->route('store.index');
+        }
     }
 
     /**
@@ -125,6 +178,20 @@ class StoreController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $images = Images::all()->where('product_id', '=', $product->id);
+        //eliminar imagenes de forma fisica
+        foreach ($images as $image) {
+            $exists = Storage::disk('local')->exists(storage_path('images/'.$image->url));
+            if ($exists) {
+                Storage::delete(storage_path('storage/images/'.$image->url));
+                Images::destroy($image->$id);
+            }
+        }
+        //el destroy elimina el registro en la base de datos de manera simbolica a travez de softdeletes
+        Product::destroy($product->id);
+
+        return redirect()->route('store.index');
+        
     }
 }

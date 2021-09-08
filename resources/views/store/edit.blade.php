@@ -1,6 +1,84 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Editar producto</h1>
+    <div class="row">
+        <div class="col-md-11">
+            <h1>Editar producto</h1>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-md-12">
+            <form action="/store/{{ $product->id }}" method="post" enctype="multipart/form-data" >
+                {{--Esta linea protege la app de ataques csrf--}}
+                @csrf
+                {{--Le especifica a php el tipo de metodo a usar al enviar el formulario--}}
+                @method('PUt')
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Nombre Del producto</label>
+                            <input type="text" class="form-control" id="name" name="name" required value="{{ $product -> name}}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="price">Precio</label>
+                            <input type="number" class="form-control" id="price" name="price" required value="{{ $product -> price}}">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="description">Descripción</label>
+                            <textarea class="form-control" name="description" id="description" >
+                                {{ $product -> description}}
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="stok">Quedan en stock</label>
+                            <input type="number" class="form-control" id="stok" name="stok"  required value="{{ $product -> stok}}" required>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="status">Estado</label>
+                            <select name="status" id="status" class="form-control" value="{{ $product -> status}}">
+                                <option value="new">Nuevo</option>
+                                <option value="used">Usado</option>
+                                <option value="broken">Roto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="warranty">Garantia</label>
+                            <select name="warranty" id="warranty" class="form-control" value="{{ $product -> warranty ? 'yes':'no'}}">
+                                <option value="yes">SI</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="fom-grup">
+                            <label for="image">Imagenes</label>
+                            <input type="file" class="form-control" id="image" name="image[]" multiple >
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 align-items-end">
+                        <button type="submit" class="btn btn-success">Actualizar</button>
+                        <a href="/store" class="btn btn-secondary">Volver</a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    </div>
 @endsection
 
