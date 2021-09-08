@@ -141,7 +141,7 @@ class StoreController extends Controller
             $images = Images::all()->where('product_id', '=', $product->id);
 
             foreach ($images as $image) {
-                //$exists = Storage::disk('local')->exists(public_path('storage/images/'.$image->url));
+                //$exists = Storage::disk('local')->exists(storage_path('images/'.$image->url));
                 //if ($exists) {
                     //Storage::delete(public_path('storage/images/'.$image->url));
                     Images::destroy($image->id);
@@ -182,7 +182,7 @@ class StoreController extends Controller
         $images = Images::all()->where('product_id', '=', $product->id);
         //eliminar imagenes de forma fisica
         foreach ($images as $image) {
-            //$exists = Storage::disk('local')->exists(public_path('storage/images/'.$image->url));
+            //$exists = Storage::disk('local')->exists(storage_path('images/'.$image->url));
             //if ($exists) {
                 //Storage::delete(public_path('storage/images/'.$image->url));
                 Images::destroy($image->id);

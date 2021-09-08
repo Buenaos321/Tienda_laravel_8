@@ -19,4 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::resource('store', StoreController::class);
+Route::resource('store', StoreController::class)->middleware('auth');
+
+Auth::routes();
+
