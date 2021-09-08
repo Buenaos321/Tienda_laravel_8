@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::resource('store', StoreController::class)->middleware('auth');
-
-Auth::routes();
+Route::resource('store', StoreController::class)->middleware('auth', 'verified');
+//Esta linea Nos permite acceder a las rutas de autenticacion
+Auth::routes(['verify'=>true]);
 
