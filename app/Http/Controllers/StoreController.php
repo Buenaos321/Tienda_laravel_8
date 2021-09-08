@@ -67,7 +67,7 @@ class StoreController extends Controller
         // por cada imgen que va a llegar en el request
         foreach($request->image as $image){
             $name = $image->getClientOriginalName().'.'.$image->getClientOriginalExtension() ;
-            $url = $image->getClientOriginalName().time().'.'.$image->getClientOriginalExtension();
+            $url = $image->getClientOriginalName().'.'.$image->getClientOriginalExtension();
 
             //los archivos se guardan en storage/app/public/images
             Image::make($image)->save(public_path('storage/images/'.$url));
@@ -141,17 +141,17 @@ class StoreController extends Controller
             $images = Images::all()->where('product_id', '=', $product->id);
 
             foreach ($images as $image) {
-                $exists = Storage::disk('local')->exists(storage_path('images/'.$image->url));
-                if ($exists) {
-                    Storage::delete(public_path('storage/images/'.$image->url));
+                //$exists = Storage::disk('local')->exists(public_path('storage/images/'.$image->url));
+                //if ($exists) {
+                    //Storage::delete(public_path('storage/images/'.$image->url));
                     Images::destroy($image->id);
-                }
+                //}
             }
 
             // por cada imgen que va a llegar en el request
             foreach($request->image as $image){
                 $name = $image->getClientOriginalName().'.'.$image->getClientOriginalExtension() ;
-                $url = $image->getClientOriginalName().time().'.'.$image->getClientOriginalExtension();
+                $url = $image->getClientOriginalName().'.'.$image->getClientOriginalExtension();
 
                 //los archivos se guardan en storage/app/public/images
                 Image::make($image)->save(public_path('storage/images/'.$url));
@@ -182,15 +182,17 @@ class StoreController extends Controller
         $images = Images::all()->where('product_id', '=', $product->id);
         //eliminar imagenes de forma fisica
         foreach ($images as $image) {
-            $exists = Storage::disk('local')->exists(storage_path('images/'.$image->url));
-            if ($exists) {
-                Storage::delete(storage_path('storage/images/'.$image->url));
-                Images::destroy($image->$id);
-            }
+            //$exists = Storage::disk('local')->exists(public_path('storage/images/'.$image->url));
+            //if ($exists) {
+                //Storage::delete(public_path('storage/images/'.$image->url));
+                Images::destroy($image->id);
+                //los archivos se guardan en storage/app/public/images
+                //Image::make($image)->save(public_path('storage/images/'.$url));
+            //}
         }
         //el destroy elimina el registro en la base de datos de manera simbolica a travez de softdeletes
         Product::destroy($product->id);
-
+        
         return redirect()->route('store.index');
         
     }
